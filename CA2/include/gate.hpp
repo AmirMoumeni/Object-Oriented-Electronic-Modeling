@@ -7,15 +7,16 @@
 class gates
 {
 protected:
-    Wire *i1, *i2, *i3, *o1;
-    int gateDalay;
+    Wire *i1, *i2, *i3, *i4, *o1;
+    int gateDelay;
     char lastOutputValue;
     bool flag;
 
 public:
-    gates(Wire &a, Wire &b, Wire &c , Wire &w, int d) :  i1(&a), i2(&b), i3(&c), o1(&w), gateDalay(d) {}
-    gates(Wire &a, Wire &b, Wire &w, int d) : i1(&a), i2(&b), o1(&w), gateDalay(d) {}
-    gates(Wire &a, Wire &w , int d) : i1(&a), o1(&w), gateDalay(d) {}
+    gates(Wire &a, Wire &b, Wire &c , Wire &d, Wire &w, int delay) :  i1(&a), i2(&b), i3(&c), i4(&d), o1(&w), gateDelay(delay) {};
+    gates(Wire &a, Wire &b, Wire &c , Wire &w, int delay) :  i1(&a), i2(&b), i3(&c), o1(&w), gateDelay(delay) {};
+    gates(Wire &a, Wire &b, Wire &w, int delay) : i1(&a), i2(&b), o1(&w), gateDelay(delay) {};
+    gates(Wire &a, Wire &w , int delay) : i1(&a), o1(&w), gateDelay(delay) {};
     gates() {};
     ~gates() {};
 
@@ -26,7 +27,7 @@ public:
 class Or : public gates
 {
 public:
-    Or(Wire &a, Wire &b, Wire &w, int d) : gates(a, b, w, d) {}
+    Or(Wire &a, Wire &b, Wire &w, int delay) : gates(a, b, w, delay) {};
     ~Or() {};
     void evl();
 };
@@ -34,7 +35,7 @@ public:
 class And : public gates
 {
 public:
-    And(Wire &a, Wire &b, Wire &w, int d) : gates(a, b, w, d) {}
+    And(Wire &a, Wire &b, Wire &w, int delay) : gates(a, b, w, delay) {};
     ~And() {};
     void evl();
 };
@@ -42,7 +43,7 @@ public:
 class Not : public gates
 {
 public:
-    Not(Wire &a, Wire &w, int d) : gates(a, w, d) {}
+    Not(Wire &a, Wire &w, int delay) : gates(a, w, delay) {};
     ~Not() {};
     void evl();
 };
@@ -50,7 +51,7 @@ public:
 class Xor : public gates
 {
 public:
-    Xor(Wire &a, Wire &b, Wire &w, int d) : gates(a, b, w, d) {}
+    Xor(Wire &a, Wire &b, Wire &w, int delay) : gates(a, b, w, delay) {};
     ~Xor() {};
     void evl();
 };
@@ -58,7 +59,7 @@ public:
 class And_3 : public gates
 {
     public:
-    And_3(Wire &a, Wire &b, Wire &c, Wire &w, int d) : gates(a, b, c, w, d) {}
+    And_3(Wire &a, Wire &b, Wire &c, Wire &w, int delay) : gates(a, b, c, w, delay) {};
     ~And_3() {};
     void evl();
 };
@@ -66,12 +67,17 @@ class And_3 : public gates
 class Or_3 : public gates
 {
     public:
-    Or_3(Wire &a, Wire &b, Wire &c, Wire &w, int d) : gates(a, b, c, w, d) {}
+    Or_3(Wire &a, Wire &b, Wire &c, Wire &w, int delay) : gates(a, b, c, w, delay) {};
     ~Or_3() {};
     void evl();
 };
 
-
-
+class Or_4 : public gates
+{
+    public:
+    Or_4(Wire &a, Wire &b, Wire &c, Wire &d, Wire &w, int delay) : gates(a, b, c, d, w, delay) {};
+    ~Or_4() {};
+    void evl();
+};
 
 #endif

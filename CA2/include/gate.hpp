@@ -7,12 +7,13 @@
 class gates
 {
 protected:
-    Wire *i1, *i2, *o1;
+    Wire *i1, *i2, *i3, *o1;
     int gateDalay;
     char lastOutputValue;
     bool flag;
 
 public:
+    gates(Wire &a, Wire &b, Wire &c , Wire &w, int d) :  i1(&a), i2(&b), i3(&c), o1(&w), gateDalay(d) {}
     gates(Wire &a, Wire &b, Wire &w, int d) : i1(&a), i2(&b), o1(&w), gateDalay(d) {}
     gates(Wire &a, Wire &w , int d) : i1(&a), o1(&w), gateDalay(d) {}
     gates() {};
@@ -53,6 +54,24 @@ public:
     ~Xor() {};
     void evl();
 };
+
+class And_3 : public gates
+{
+    public:
+    And_3(Wire &a, Wire &b, Wire &c, Wire &w, int d) : gates(a, b, c, w, d) {}
+    ~And_3() {};
+    void evl();
+};
+
+class Or_3 : public gates
+{
+    public:
+    Or_3(Wire &a, Wire &b, Wire &c, Wire &w, int d) : gates(a, b, c, w, d) {}
+    ~Or_3() {};
+    void evl();
+};
+
+
 
 
 #endif

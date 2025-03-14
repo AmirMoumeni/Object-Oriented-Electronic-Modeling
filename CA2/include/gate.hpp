@@ -18,7 +18,7 @@ public:
     gates(Wire &a, Wire &b, Wire &w, int delay) : i1(&a), i2(&b), o1(&w), gateDelay(delay) {};
     gates(Wire &a, Wire &w , int delay) : i1(&a), o1(&w), gateDelay(delay) {};
     gates() {};
-    ~gates() {};
+    virtual ~gates() {};
 
     void evl() {};
     char out() {return o1->value(); }

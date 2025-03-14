@@ -9,6 +9,8 @@ Mux::Mux(Wire &a, Wire &b, Wire &c, Wire &d, Wire &e, Wire &f, Wire &w, int dela
     Not *notGate1 = new Not(*i1, *not_i1, 0);
     notGate->evl();
     notGate1->evl();
+    delete notGate;
+    delete notGate1;
 
 }
 
@@ -49,5 +51,5 @@ void Mux::evl()
 
 Mux::~Mux() {
     delete not_i0;
-    delete not_i0;
+    delete not_i1;
 }

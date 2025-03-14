@@ -17,6 +17,8 @@ class gates
 protected:
     wire *i1, *i2, *o1;
     int gateDalay;
+    char lastOutputValue;
+    bool flag;
 
 public:
     gates(wire &a, wire &b, wire &w, int d) : i1(&a), i2(&b), o1(&w), gateDalay(d) {}
@@ -25,6 +27,7 @@ public:
     ~gates() {};
 
     void evl() {};
+    char out() {return o1->value(); }
 };
 
 class Or : public gates
@@ -67,6 +70,9 @@ void Or::evl()
         o1->setValue('0');
     else 
         o1->setValue('X');
+    
+    flag = (lastOutputValue == o1->value());
+    lastOutputValue = o1->value();
 }
 
 void And::evl()
@@ -77,6 +83,9 @@ void And::evl()
         o1->setValue('0');
     else 
         o1->setValue('X');
+
+    flag = (lastOutputValue == o1->value());
+    lastOutputValue = o1->value();
 }
 
 void Not::evl()
@@ -87,6 +96,9 @@ void Not::evl()
         o1->setValue('1');
     else 
         o1->setValue('X');
+
+    flag = (lastOutputValue == o1->value());
+    lastOutputValue = o1->value();
 }
 
 void Xor::evl()
@@ -97,4 +109,7 @@ void Xor::evl()
         o1->setValue('0');
     else 
         o1->setValue('X');
+
+    flag = (lastOutputValue == o1->value());
+    lastOutputValue = o1->value();
 }

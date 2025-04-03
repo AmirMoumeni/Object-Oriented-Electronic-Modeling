@@ -10,7 +10,7 @@ protected:
     Wire *i1, *i2, *i3, *i4, *o1;
     int gateDelay;
     char lastOutputValue;
-    bool flag;
+ 
 
 public:
     gates(Wire &a, Wire &b, Wire &c , Wire &d, Wire &w, int delay) :  i1(&a), i2(&b), i3(&c), i4(&d), o1(&w), gateDelay(delay) {};
@@ -18,11 +18,12 @@ public:
     gates(Wire &a, Wire &b, Wire &w, int delay) : i1(&a), i2(&b), o1(&w), gateDelay(delay) {};
     gates(Wire &a, Wire &w , int delay) : i1(&a), o1(&w), gateDelay(delay) {};
     gates() {};
-    ~gates() {};
-
+    virtual ~gates() {};
+    bool flag;
     bool getFlag() {return flag;}
     void evl() {};
     char out() {return o1->value(); }
+    void showWires();
 };
 
 class Or : public gates

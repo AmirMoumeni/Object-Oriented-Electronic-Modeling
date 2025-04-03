@@ -114,3 +114,7 @@ void And_3::evl()
     flag = (lastOutputValue == o1->value());
     lastOutputValue = o1->value();
 }
+
+void gates::showWires(){
+    cout << typeid(*this).name() <<" out: " <<o1->getName() <<" in: " << i1->getName() << " " << i2->getName() << endl;
+}

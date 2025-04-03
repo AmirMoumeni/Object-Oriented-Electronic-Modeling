@@ -13,6 +13,7 @@ public:
     void addTestBench(vector<Event> testbench) {events = testbench;}
     void simulate();
     vector<Wire*> getWires() {return wires;}
+    void checkConnections();
 private:
     vector<Event> events;
     vector<Wire*> changeStringToWire(vector<string> string_wires);

@@ -15,7 +15,7 @@ void Interface::readVerilogNetlist() {
         while (ss >> wire) {
             wires.push_back(wire);
         }
-        cout << gate_name << " " << delay << endl;
+        // cout << gate_name << " " << delay << endl;
         circuit.addGate(gate_name, delay, wires);
     }
 

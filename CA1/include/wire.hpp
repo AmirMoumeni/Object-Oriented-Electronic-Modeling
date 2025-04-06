@@ -11,7 +11,7 @@ private:
 
 public:
     Wire(string assign_name = "") {name = assign_name;};
-    char value() {return (val != '0' || val != '1') ? 'X' : val;}
+    char value() {return val;}
     void setValue(char v) {val = v;}
     string getName() {return name;}
     bool stage;

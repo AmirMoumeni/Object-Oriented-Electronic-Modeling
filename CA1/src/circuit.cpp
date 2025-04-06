@@ -36,43 +36,54 @@ void Circuit::addGate(string gate_name, int delay, vector<string> string_wires) 
 
 void Circuit::simulate() {
     for (const Event& event : testBench) {
-        size_t j =0;
         for (size_t i = 0; i < event.transitions.size(); i++) {
-            if (j < wires.size() && j%3 != 0 ) {
-                wires[j]->setValue(event.transitions[i]);
-                cout << wires[j]->getName() << " setValue to " << event.transitions[i] << endl;
-            }
-            j++;
-        }
+            if (i < input_wires.size()) {
+                input_wires[i]->setValue(event.transitions[i]);
+                // cout << input_wires[i]->getName() << " setValue to " << input_wires[i]->value() << endl;
 
-        bool changed;
-        do {
-            changed = false;
-            for (auto& gate : input_gates) {
-                char prev_output = gate.out();
-                
-                gate.evl();
-                
-                if (gate.out() != prev_output) {
-                    changed = true;
+                for (Wire* wire : wires) {
+                    if (wire->getName() == input_wires[i]->getName()) {
+                        wire->setValue(input_wires[i]->value());
+                    }
                 }
             }
-        } while (changed);
+        }
+
+        for (auto& gate : input_gates) {
+            gate.evl();
+        }
 
         cout << "Time: " << event.time_delay << endl;
-        for (Wire* wire : wires) {
-            cout << wire->getName() << ": " << wire->value() << endl;
+        for (Wire* wire : input_wires) {
+            cout << wire->getName() << ":" << wire->value() << endl;
+        }
+        for (Wire* wire : output_wires) {
+            cout << wire->getName() << ":" << wire->value() << endl;
         }
         cout << "-------------------" << endl;
     }
 }
 
-void Circuit::checkConnections(){
-    cout << endl << "Gates :" << endl;
-    for(auto gate: input_gates){
+
+void Circuit::checkConnections() {
+    cout << "\n=== Circuit Connections ===" << endl;
+
+    cout << "\nInputs:" << endl;
+    for (auto wire : input_wires) {
+        cout << "  " << wire->getName() << endl;
+    }
+
+    cout << "\nOutputs:" << endl;
+    for (auto wire : output_wires) {
+        cout << "  " << wire->getName() << endl;
+    }
+
+    cout << "\nGates:" << endl;
+    for (auto& gate : input_gates) {
         gate.introduce();
     }
 }
+
 
 void Circuit::showTestBench(){
     cout << endl << "TestBench :" << endl;
@@ -83,4 +94,9 @@ void Circuit::showTestBench(){
         }
     }
     cout << endl;
+}
+
+void Circuit::setIOWires(vector<string> inputs, vector<string> outputs) {
+    input_wires = changeStringToWire(inputs);
+    output_wires = changeStringToWire(outputs);
 }

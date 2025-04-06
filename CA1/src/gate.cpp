@@ -115,6 +115,6 @@ void And_3::evl()
     lastOutputValue = o1->value();
 }
 
-void gates::showWires(){
-    cout << typeid(*this).name() <<" out: " <<o1->getName() <<" in: " << i1->getName() << " " << i2->getName() << endl;
+void gates::introduce(){
+    cout << name <<"- out: " <<o1->getName() <<" in: " << i1->getName() << " " << i2->getName() << endl;
 }

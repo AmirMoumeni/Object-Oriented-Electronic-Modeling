@@ -15,10 +15,9 @@ void Interface::readVerilogNetlist() {
         while (ss >> wire) {
             wires.push_back(wire);
         }
-        // cout << gate_name << " " << delay << endl;
         circuit.addGate(gate_name, delay, wires);
     }
-
+    circuit.checkConnections();
     file.close();
 }
 
@@ -27,14 +26,17 @@ void Interface::readTestBench() {
 
     vector<Event> testbench;
     string line;
+
     while (getline(file, line)) {
-        istringstream ss(line);
+        if (line.empty() || line[0] != '#') continue; 
+
+        istringstream ss(line.substr(1)); 
         Event event;
         ss >> event.time_delay;
 
-        char value;
-        while (ss >> value) {
-            event.events.push_back(value);
+        int temp;
+        while (ss >> temp) {
+            event.transitions.push_back(temp + '0'); 
         }
 
         testbench.push_back(event);
@@ -42,7 +44,10 @@ void Interface::readTestBench() {
 
     file.close();
     circuit.addTestBench(testbench);
+    circuit.showTestBench();
 }
+
+
 
 void Interface::showOutput() {
     vector<Wire*> output_wires = circuit.getWires();

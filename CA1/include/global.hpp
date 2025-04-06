@@ -18,8 +18,10 @@ const char UNKNOWN = 'X';
 
 struct Event {
     int time_delay;
-    vector<char> events;
+    vector<char> transitions;
 };
 
 
 #endif
+
+

@@ -14,6 +14,7 @@ public:
     char value() {return (val != '0' || val != '1') ? 'X' : val;}
     void setValue(char v) {val = v;}
     string getName() {return name;}
+    bool stage;
 };
 
 #endif

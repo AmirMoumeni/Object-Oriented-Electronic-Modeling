@@ -7,10 +7,10 @@
 class gates
 {
 protected:
+    string name;
     Wire *i1, *i2, *i3, *i4, *o1;
     int gateDelay;
     char lastOutputValue;
- 
 
 public:
     gates(Wire &a, Wire &b, Wire &c , Wire &d, Wire &w, int delay) :  i1(&a), i2(&b), i3(&c), i4(&d), o1(&w), gateDelay(delay) {};
@@ -21,15 +21,15 @@ public:
     virtual ~gates() {};
     bool flag;
     bool getFlag() {return flag;}
-    void evl() {};
+    virtual void evl() {};
     char out() {return o1->value(); }
-    void showWires();
+    void introduce();
 };
 
 class Or : public gates
 {
 public:
-    Or(Wire &a, Wire &b, Wire &w, int delay) : gates(a, b, w, delay) {};
+    Or(Wire &a, Wire &b, Wire &w, int delay) : gates(a, b, w, delay) { name = "OR";};
     ~Or() {};
     void evl();
 };
@@ -37,7 +37,7 @@ public:
 class And : public gates
 {
 public:
-    And(Wire &a, Wire &b, Wire &w, int delay) : gates(a, b, w, delay) {};
+    And(Wire &a, Wire &b, Wire &w, int delay) : gates(a, b, w, delay) {name = "AND";};
     ~And() {};
     void evl();
 };
@@ -45,7 +45,7 @@ public:
 class Not : public gates
 {
 public:
-    Not(Wire &a, Wire &w, int delay) : gates(a, w, delay) {};
+    Not(Wire &a, Wire &w, int delay) : gates(a, w, delay) {name = "NOT";};
     ~Not() {};
     void evl();
 };
@@ -53,7 +53,7 @@ public:
 class Nand : public gates
 {
 public:
-    Nand(Wire &a, Wire &b, Wire &w, int delay) : gates(a, b, w, delay) {};
+    Nand(Wire &a, Wire &b, Wire &w, int delay) : gates(a, b, w, delay) {name = "NAND";};
     ~Nand() {};
     void evl();
 };
@@ -61,7 +61,7 @@ public:
 class Nor : public gates
 {
 public:
-    Nor(Wire &a, Wire &b, Wire &w, int delay) : gates(a, b, w, delay) {};
+    Nor(Wire &a, Wire &b, Wire &w, int delay) : gates(a, b, w, delay) {name = "NOR";};
     ~Nor() {};
     void evl();
 };
@@ -69,7 +69,7 @@ public:
 class Xor : public gates
 {
 public:
-    Xor(Wire &a, Wire &b, Wire &w, int delay) : gates(a, b, w, delay) {};
+    Xor(Wire &a, Wire &b, Wire &w, int delay) : gates(a, b, w, delay) {name = "XOR";};
     ~Xor() {};
     void evl();
 };

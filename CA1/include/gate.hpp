@@ -18,12 +18,13 @@ public:
     gates(Wire &a, Wire &b, Wire &w, int delay) : i1(&a), i2(&b), o1(&w), gateDelay(delay) {};
     gates(Wire &a, Wire &w , int delay) : i1(&a), o1(&w), gateDelay(delay) {};
     gates() {};
-    virtual ~gates() {};
+    ~gates() {};
     bool flag;
     bool getFlag() {return flag;}
     virtual void evl() {};
     char out() {return o1->value(); }
     void introduce();
+    void printValues();
 };
 
 class Or : public gates

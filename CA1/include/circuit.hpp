@@ -20,7 +20,7 @@ public:
     void showTestBench();
 private:
     vector<Event> testBench;
-    vector<gates> input_gates;
+    vector<gates*> input_gates;
     map<string, Wire*> wires_map;
     vector<Wire*> wires;
     vector<Wire*> input_wires;

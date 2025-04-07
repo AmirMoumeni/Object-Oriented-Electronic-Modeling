@@ -118,3 +118,9 @@ void And_3::evl()
 void gates::introduce(){
     cout << name <<"- out: " <<o1->getName() <<" in: " << i1->getName() << " " << i2->getName() << endl;
 }
+
+void gates::printValues(){
+    cout << name << " : " << i1->getName() << "." << i1->value() 
+         << i2->getName() << "." << i2->value()
+         << o1->getName() << "." << o1->value() << endl;
+}

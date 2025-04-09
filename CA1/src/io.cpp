@@ -1,4 +1,5 @@
 #include "io.hpp"
+#include "vcd_generator.hpp"
 
 void Interface::readVerilogNetlist() {
     ifstream file("files/circuit.txt");
@@ -86,14 +87,19 @@ void Interface::readTestBench() {
 
 void Interface::showOutput() {
     vector<Wire*> output_wires = circuit.getWires();
+    cout << "Wires Value end of Simulation : " << endl;
     for (Wire* wire : output_wires) {
         cout << wire->getName() << " : " << wire->value() << endl;
     }
 }
 
 void Interface::run() {
+    VCDGenerator VCD;
+
     readVerilogNetlist();
     readTestBench();
     circuit.simulate();
-    // showOutput();
+    showOutput();
+    VCD.generateVCDFileFromData();
+
 }

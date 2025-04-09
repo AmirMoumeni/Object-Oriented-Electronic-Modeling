@@ -3,6 +3,8 @@
 
 #include "global.hpp"
 
+class gates;
+
 class Wire
 {
 private:
@@ -15,6 +17,16 @@ public:
     void setValue(char v) {val = v;}
     string getName() {return name;}
     bool stage;
+    vector<gates*> connectedGates;
+
+    void attachGate(gates* g) {
+        connectedGates.push_back(g);
+    }
+
+    const vector<gates*>& getConnectedGates() const {
+        return connectedGates;
+    }
+
 };
 
 #endif

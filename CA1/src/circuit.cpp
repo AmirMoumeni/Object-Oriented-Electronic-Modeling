@@ -1,4 +1,6 @@
 #include "circuit.hpp"
+#include "simulation_context.hpp"
+
 #include <algorithm>
 
 vector<Wire*> Circuit::changeStringToWire(vector<string> string_wires) {
@@ -35,28 +37,30 @@ void Circuit::addGate(string gate_name, int delay, vector<string> string_wires) 
 }
 
 void Circuit::simulate() {
-    int currentTime = 0;  
-
     for (const Event& event : testBench) {
+        SimulationContext::current_time += event.time_delay;
+
         for (size_t i = 0; i < event.transitions.size(); i++) {
             if (i < input_wires.size()) {
-                input_wires[i]->setValue(event.transitions[i]);
-
-                for (Wire* wire : wires) {
-                    if (wire->getName() == input_wires[i]->getName()) {
-                        wire->setValue(input_wires[i]->value());
-                    }
-                }
+                Wire* w = input_wires[i];
+                SimEvent e = {SimulationContext::current_time, w, event.transitions[i]};
+                SimulationContext::eventQueue.push(e);
             }
         }
 
-        for (auto& gate : input_gates) {
-            gate->evl();
+        while (!SimulationContext::eventQueue.empty()) {
+            SimEvent e = SimulationContext::eventQueue.top();
+            SimulationContext::eventQueue.pop();
+
+            SimulationContext::current_time = e.time;
+            e.target->setValue(e.newValue);
+
+            for (gates* g : e.target->getConnectedGates()) {
+                g->evl();  
+            }
         }
 
-        currentTime += event.time_delay;  
-
-        cout << "Time: " << currentTime << endl;
+        cout << "Time: " << SimulationContext::current_time << endl;
         for (Wire* wire : input_wires) {
             cout << wire->getName() << ":" << wire->value() << endl;
         }
@@ -66,6 +70,7 @@ void Circuit::simulate() {
         cout << "-------------------" << endl;
     }
 }
+
 
 
 

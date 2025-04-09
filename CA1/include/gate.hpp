@@ -4,6 +4,8 @@
 #include "global.hpp"
 #include "wire.hpp"
 
+class Wire;
+
 class gates
 {
 protected:
@@ -15,7 +17,11 @@ protected:
 public:
     gates(Wire &a, Wire &b, Wire &c , Wire &d, Wire &w, int delay) :  i1(&a), i2(&b), i3(&c), i4(&d), o1(&w), gateDelay(delay) {};
     gates(Wire &a, Wire &b, Wire &c , Wire &w, int delay) :  i1(&a), i2(&b), i3(&c), o1(&w), gateDelay(delay) {};
-    gates(Wire &a, Wire &b, Wire &w, int delay) : i1(&a), i2(&b), o1(&w), gateDelay(delay) {};
+    gates(Wire &a, Wire &b, Wire &w, int delay) : i1(&a), i2(&b), o1(&w), gateDelay(delay) {
+        a.attachGate(this);
+        b.attachGate(this);
+        w.attachGate(this); 
+    };
     gates(Wire &a, Wire &w , int delay) : i1(&a), o1(&w), gateDelay(delay) {};
     gates() {};
     ~gates() {};

@@ -1,4 +1,4 @@
 input B,C,D, output F
 AND 11 A B C
-AND 12 E D B
-NAND 11 F A E
+AND 11 E D B
+NAND 12 F A E

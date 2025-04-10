@@ -1,0 +1,33 @@
+`timescale 1ns/1ns
+module netList(input B, C, D, output F);
+    wire A, E;
+
+    and #12 G1 (A, B, C);
+    and #12 G2 (E, D, B);
+    nand #11 G3 (F, A, E);
+endmodule
+
+
+module netList_tb;
+    reg B, C, D;
+    wire F;
+
+
+    netList uut (.B(B), .C(C), .D(D), .F(F));
+
+    initial begin
+        B = 1; C = 1; D = 1;
+
+        #5;
+        B = 0; C = 1; D = 1;
+
+        #8;
+        B = 0; C = 1; D = 0;
+
+        #20;
+    end
+
+    initial begin
+        $monitor("Time = %0t ns | B = %b, C = %b, D = %b => F = %b", $time, B, C, D, F);
+    end
+endmodule

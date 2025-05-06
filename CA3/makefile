@@ -14,3 +14,25 @@ $(TARGET): $(SRC)
 
 clean:
 	rm -f $(TARGET)
+
+
+
+
+
+# SYSTEMC_HOME ?= /Users/mahdis/systemc
+# CXX       := g++
+# CXXFLAGS  := -std=c++17 -Wall -Wextra
+# INCLUDE   := -I$(SYSTEMC_HOME)/include
+# LIBPATH   := -L$(SYSTEMC_HOME)/lib
+# LIBS      := -lsystemc -lm -pthread
+# SRC       := test.cpp
+# OBJ       := $(SRC:.cpp=.o)
+# TARGET    := test_systemc
+# all: $(TARGET)
+# $(TARGET): $(OBJ)
+# 	$(CXX) $(CXXFLAGS) $^ $(LIBPATH) $(LIBS) -o $@
+# %.o: %.cpp
+# 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
+# clean:
+# 	rm -f $(OBJ) $(TARGET)
+# .PHONY: all clean

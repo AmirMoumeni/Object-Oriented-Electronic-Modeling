@@ -275,3 +275,53 @@ SC_MODULE(VAM16) {
         ctrl.ready(ready);
     }
 };
+
+int sc_main(int argc, char* argv[]) {
+    // سیگنال‌ها
+    sc_clock clk("clk", 10, SC_NS);
+    sc_signal<bool> rst, start, ready;
+    sc_signal<sc_uint<W16>> A, B, P;
+
+    // نمونه‌سازی از ماژول
+    VAM16 vam("vam");
+    vam.clk(clk);
+    vam.rst(rst);
+    vam.start(start);
+    vam.A(A);
+    vam.B(B);
+    vam.ready(ready);
+    vam.P(P);
+
+    // دنبال کردن سیگنال‌ها
+    sc_trace_file *tf = sc_create_vcd_trace_file("vam16_trace");
+    sc_trace(tf, clk, "clk");
+    sc_trace(tf, rst, "rst");
+    sc_trace(tf, start, "start");
+    sc_trace(tf, A, "A");
+    sc_trace(tf, B, "B");
+    sc_trace(tf, ready, "ready");
+    sc_trace(tf, P, "P");
+
+    // مقداردهی اولیه
+    rst = 1;
+    start = 0;
+    A = 1234;
+    B = 25;
+
+    sc_start(10, SC_NS); // ریست
+
+    rst = 0;
+    start = 1;
+    sc_start(10, SC_NS); // شروع
+
+    start = 0;
+    // اجرای شبیه‌سازی تا وقتی ready بشه
+    for (int i = 0; i < 100 && !ready.read(); ++i) {
+        sc_start(10, SC_NS);
+    }
+
+    std::cout << "Result: " << P.read() << std::endl;
+
+    sc_close_vcd_trace_file(tf);
+    return 0;
+}

@@ -1,38 +1,29 @@
-SYSTEMC_HOME = /home/amir/Desktop/systemc-install
-SRC = test.cpp
-INCLUDE = -I$(SYSTEMC_HOME)/include
-LIBRARY_PATH = -L$(SYSTEMC_HOME)/lib-linux64
-LIBRARY = -lsystemc
 CXX = g++
-CXXFLAGS = -std=c++17
-TARGET = test_systemc
+CXXFLAGS = -Wall -std=c++17 -Iinclude -I$(SYSTEMC_HOME)/include
+LDFLAGS = -L$(SYSTEMC_HOME)/lib-linux64 -lsystemc
 
-all: $(TARGET)
+SRC_DIR = src
+OBJ_DIR = obj
+INCLUDE_DIR = include
 
-$(TARGET): $(SRC)
-	$(CXX) $(CXXFLAGS) $(SRC) $(INCLUDE) $(LIBRARY_PATH) $(LIBRARY) -o $(TARGET)
+SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
+OBJECTS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SOURCES))
+
+TARGET = multiplier_test
+
+all: $(OBJ_DIR) $(TARGET)
+
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
+$(TARGET): $(OBJECTS)
+	$(CXX) $^ -o $@ $(LDFLAGS)
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(TARGET)
+	rm -rf $(OBJ_DIR) $(TARGET)
 
-
-
-
-
-# SYSTEMC_HOME ?= /Users/mahdis/systemc
-# CXX       := g++
-# CXXFLAGS  := -std=c++17 -Wall -Wextra
-# INCLUDE   := -I$(SYSTEMC_HOME)/include
-# LIBPATH   := -L$(SYSTEMC_HOME)/lib
-# LIBS      := -lsystemc -lm -pthread
-# SRC       := test.cpp
-# OBJ       := $(SRC:.cpp=.o)
-# TARGET    := test_systemc
-# all: $(TARGET)
-# $(TARGET): $(OBJ)
-# 	$(CXX) $(CXXFLAGS) $^ $(LIBPATH) $(LIBS) -o $@
-# %.o: %.cpp
-# 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
-# clean:
-# 	rm -f $(OBJ) $(TARGET)
-# .PHONY: all clean
+run: all
+	./$(TARGET)

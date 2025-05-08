@@ -4,7 +4,11 @@
       "name": "macos-clang-arm64",
       "includePath": [
         "${workspaceFolder}/CA1/include",
+        "${workspaceFolder}/CA3/include",
+
         "${workspaceFolder}/CA1/src",
+        "${workspaceFolder}/CA3/src",
+
         "/home/amir/Desktop/systemc-install/include"
       ],
       "compilerPath": "/usr/bin/clang",

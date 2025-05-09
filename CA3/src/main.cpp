@@ -1,133 +1,85 @@
-// #include <systemc.h>
-// #include "multiplier.h"
-// #include "approx_multiplier.h"
-// #include <cstdlib>
-// #include <ctime>
-// #include <iostream>
-
-// int sc_main(int argc, char* argv[]) {
-//     sc_clock clk("clk", 10, SC_NS);
-//     sc_signal<bool> rst;
-
-//     sc_signal<sc_uint<8>> A8, B8;
-//     sc_signal<sc_uint<16>> W8;
-//     sc_signal<bool> start8, ready8;
-
-//     sc_signal<sc_uint<16>> A16, B16, W16;
-//     sc_signal<bool> start16, ready16;
-
-//     Multiplier multiplier("multiplier");
-//     multiplier.A(A8); multiplier.B(B8); multiplier.W(W8);
-//     multiplier.startB(start8); multiplier.readyB(ready8);
-//     multiplier.clk(clk); multiplier.rst(rst);
-
-//     ApproxMultiplier approx("approx_multiplier");
-//     approx.A(A16); approx.B(B16); approx.W(W16);
-//     approx.start(start16); approx.ready(ready16);
-//     approx.clk(clk); approx.rst(rst);
-
-//     sc_start(1, SC_NS);
-//     rst.write(true);
-//     sc_start(10, SC_NS);
-//     rst.write(false);
-//     sc_start(10, SC_NS);
-
-//     std::srand(std::time(nullptr));
-
-//     sc_uint<8> a_val = std::rand() % 256;
-//     sc_uint<8> b_val = std::rand() % 256;
-
-//     A8.write(a_val);
-//     B8.write(b_val);
-//     start8.write(true);
-//     sc_start(10, SC_NS);
-//     start8.write(false);
-
-//     while (!ready8.read()) {
-//         sc_start(10, SC_NS);
-//     }
-
-//     sc_uint<16> expected_exact = a_val * b_val;
-
-//     std::cout << "[Multiplier]\n"
-//               << "  A = " << a_val << ", B = " << b_val << "\n"
-//               << "  Output     = " << W8.read() << "\n"
-//               << "  Expected   = " << expected_exact << "\n\n";
-
-//     sc_uint<16> a16_val = std::rand() % 8192;
-//     sc_uint<16> b16_val = std::rand() % 8192;
-
-//     A16.write(a16_val);
-//     B16.write(b16_val);
-//     start16.write(true);
-//     sc_start(10, SC_NS);
-//     start16.write(false);
-
-//     while (!ready16.read()) {
-//         sc_start(10, SC_NS);
-//     }
-
-//     sc_uint<32> expected_approx = (a16_val * b16_val);  
-
-//     std::cout << "[ApproxMultiplier]\n"
-//               << "  A = " << a16_val << ", B = " << b16_val << "\n"
-//               << "  Output     = " << W16.read() << "\n"
-//               << "  Expected   = " << expected_approx << "\n";
-
-//     sc_stop();
-//     return 0;
-// }
-
 
 #include <systemc.h>
+#include "multiplier.h"
+#include "approx_multiplier.h"
 #include "ApproxMulBFM.h"
+#include <cstdlib>
+#include <ctime>
 #include <iostream>
+
+using namespace std;
 
 int sc_main(int argc, char* argv[]) {
 
     sc_clock clk("clk", sc_time(10, SC_NS));
     sc_signal<bool> reset_n;
-    sc_signal<sc_logic> start_sig;
-    sc_signal<sc_logic> ready_sig;
-    sc_signal<sc_lv<DATA_WIDTH>> sigA, sigB, sigR;
 
-    ApproxMulBFM dut("ApproxMulBFM");
-    dut.clk(clk);
-    dut.reset_n(reset_n);
-    dut.start_sig(start_sig);
-    dut.ready_sig(ready_sig);
-    dut.in_A(sigA);
-    dut.in_B(sigB);
-    dut.out_mul(sigR);
 
-    sc_trace_file* tf = sc_create_vcd_trace_file("ApproxBFM_tb");
-    sc_trace(tf, clk, "clk");
-    sc_trace(tf, reset_n, "reset_n");
-    sc_trace(tf, start_sig, "start");
-    sc_trace(tf, sigA, "A");
-    sc_trace(tf, sigB, "B");
-    sc_trace(tf, ready_sig, "ready");
-    sc_trace(tf, sigR, "result");
+    sc_signal<sc_uint<8>> A8, B8;
+    sc_signal<sc_uint<16>> W8;
+    sc_signal<bool> start8, ready8;
+
+    sc_signal<sc_uint<16>> A16_rtl, B16_rtl;
+    sc_signal<sc_uint<16>> W16_rtl;
+    sc_signal<bool> start16_rtl, ready16_rtl;
+
+    sc_signal<sc_logic> start_bfm, ready_bfm;
+    sc_signal<sc_lv<DATA_WIDTH>> A16_bfm, B16_bfm, W16_bfm;
+
+    Multiplier mul8("Multiplier8");
+    mul8.clk(clk); mul8.rst(reset_n);
+    mul8.A(A8); mul8.B(B8); mul8.W(W8);
+    mul8.startB(start8); mul8.readyB(ready8);
+
+    ApproxMultiplier rtl16("ApproxRTL16");
+    rtl16.clk(clk); rtl16.rst(reset_n);
+    rtl16.A(A16_rtl); rtl16.B(B16_rtl); rtl16.W(W16_rtl);
+    rtl16.start(start16_rtl); rtl16.ready(ready16_rtl);
+
+    ApproxMulBFM bfm16("ApproxBFM16");
+    bfm16.clk(clk); bfm16.reset_n(reset_n);
+    bfm16.start_sig(start_bfm); bfm16.ready_sig(ready_bfm);
+    bfm16.in_A(A16_bfm); bfm16.in_B(B16_bfm); bfm16.out_mul(W16_bfm);
 
     reset_n = false;
-    start_sig = SC_LOGIC_0;
+    start8 = false; start16_rtl = false; start_bfm = SC_LOGIC_0;
     sc_start(20, SC_NS);
-
     reset_n = true;
     sc_start(20, SC_NS);
 
-    sigA = 0x0F0F;
-    sigB = 0x00FF;
-    start_sig = SC_LOGIC_1;
-    sc_start(10, SC_NS);
-    start_sig = SC_LOGIC_0;
+    srand(time(nullptr));
 
-    while (ready_sig.read() != SC_LOGIC_1) sc_start(10, SC_NS);
-    std::cout << "Input A=0x" << std::hex << sigA.read().to_uint()
-              << " B=0x" << sigB.read().to_uint()
-              << " => Result=0x" << sigR.read().to_uint() << std::endl;
+    for (int i = 0; i < 5; ++i) {
+        unsigned int a8 = rand() % 256;
+        unsigned int b8 = rand() % 256;
+        A8.write(a8); B8.write(b8);
+        start8 = true;
+        sc_start(10, SC_NS);
+        start8 = false;
+        while (!ready8.read()) sc_start(10, SC_NS);
+        unsigned int exact = a8 * b8;
+        cout << "[8-bit RTL] A=" << a8 << " B=" << b8
+                  << " => W=" << W8.read() << " (expected=" << exact << ")";
 
+        unsigned int a16 = rand() % 8192;
+        unsigned int b16 = rand() % 8192;
+        A16_rtl.write(a16); B16_rtl.write(b16);
+        start16_rtl = true;
+        sc_start(10, SC_NS);
+        start16_rtl = false;
+        while (!ready16_rtl.read()) sc_start(10, SC_NS);
+        cout << "[16-bit RTL Approx] A=" << a16 << " B=" << b16
+                  << " => W=" << W16_rtl.read() << " ";
 
-    sc_close_vcd_trace_file(tf);
+        A16_bfm = sc_lv<DATA_WIDTH>(a16);
+        B16_bfm = sc_lv<DATA_WIDTH>(b16);
+        start_bfm = SC_LOGIC_1;
+        sc_start(10, SC_NS);
+        start_bfm = SC_LOGIC_0;
+        while (ready_bfm.read() != SC_LOGIC_1) sc_start(10, SC_NS);
+        cout << "[16-bit BFM Approx] A=" << hex << a16 << " B=" << b16 << " => W=0x" << W16_bfm.read().to_uint() << dec << " ";
+    }
+
+    sc_stop();
     return 0;
 }

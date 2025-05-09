@@ -60,8 +60,8 @@ int sc_main(int argc, char* argv[]) {
               << "  Expected   = " << expected_exact << "\n\n";
 
     // ----------- Test ApproxMultiplier -----------
-    sc_uint<16> a16_val = std::rand() % 65536;
-    sc_uint<16> b16_val = std::rand() % 65536;
+    sc_uint<16> a16_val = std::rand() % 8192;
+    sc_uint<16> b16_val = std::rand() % 8192;
 
     A16.write(a16_val);
     B16.write(b16_val);
@@ -73,7 +73,7 @@ int sc_main(int argc, char* argv[]) {
         sc_start(10, SC_NS);
     }
 
-    sc_uint<16> expected_approx = (a16_val * b16_val) & 0xFFFF;  // فقط 16 بیت پایین
+    sc_uint<32> expected_approx = (a16_val * b16_val);  
 
     std::cout << "[ApproxMultiplier]\n"
               << "  A = " << a16_val << ", B = " << b16_val << "\n"

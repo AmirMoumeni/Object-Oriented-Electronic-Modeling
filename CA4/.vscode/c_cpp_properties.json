@@ -9,7 +9,9 @@
       "cStandard": "${default}",
       "cppStandard": "${default}",
       "intelliSenseMode": "macos-clang-arm64",
-      "compilerArgs": []
+      "compilerArgs": [
+        ""
+      ]
     }
   ],
   "version": 4

@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/mahdis/Desktop/Object-Oriented-Electronic-Modeling/CA2/src",
-      "program": "/Users/mahdis/Desktop/Object-Oriented-Electronic-Modeling/CA2/src/build/Debug/outDebug"
+      "cwd": "/Users/mahdis/Me/university/lessons/current/Object-Oriented-Electronic-Modeling/CA3/src",
+      "program": "/Users/mahdis/Me/university/lessons/current/Object-Oriented-Electronic-Modeling/CA3/src/build/Debug/outDebug"
     }
   ]
 }

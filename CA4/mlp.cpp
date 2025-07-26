@@ -17,6 +17,8 @@ SC_MODULE(CoreUnit_TB) {
         sensitive << clk.posedge_event();
     }
 
+    
+
     void run_test() {
         signal_exec.write(sc_logic_1);
         wait(SC_ZERO_TIME);

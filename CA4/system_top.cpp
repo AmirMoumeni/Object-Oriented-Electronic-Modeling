@@ -2,6 +2,7 @@
 #include <array>
 #include "mlp.hpp"
 #include "channels.hpp"
+#include "mma2.cpp"
 
 SC_MODULE(MLPSystemTop) {
     sc_clock clk;
@@ -22,7 +23,7 @@ SC_MODULE(MLPSystemTop) {
           chan_mma_to_proc("mma_to_proc")
     {
         SC_THREAD(run_processor);
-        sensitive << clk.pos();
+        sensitive << clk.posedge_event();
 
         SC_THREAD(run_accelerator);
     }

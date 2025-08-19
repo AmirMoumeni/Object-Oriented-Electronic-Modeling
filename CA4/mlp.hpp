@@ -46,7 +46,7 @@ SC_MODULE(CoreUnit) {
                 }
 
 
-                std::ofstream fout("out.txt");
+                std::ofstream fout("MLP_out.txt");
                 for (const auto &val : result_vec)
                     fout << val.to_int() << "\n";
                 fout.close();

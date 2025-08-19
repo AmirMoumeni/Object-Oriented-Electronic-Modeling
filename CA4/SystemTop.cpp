@@ -182,7 +182,7 @@ SC_MODULE(CPU) {
     }
 
     void dump_outputs() {
-        ofstream fout("outputs.txt");
+        ofstream fout("SystemTop_outputs.txt");
         if (!fout) {
             cerr << "Error creating outputs.txt" << endl;
             return;

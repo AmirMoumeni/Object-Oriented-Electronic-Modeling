@@ -1,0 +1,30 @@
+MSI r1 1
+MHI r1 128
+MSI r2 2
+STR r1 r2
+
+MSI r1 2
+MHI r1 128
+MSI r3 2
+STR r1 r3
+
+MSI r1 3
+MHI r1 128
+MSI r3 2
+STR r1 r3
+
+MSI r1 0
+MHI r1 128
+MSI r3 1
+STR r1 r3
+
+MSI r4 2
+NTD r4
+MSI r1 4
+MHI r1 128
+LDR r3 r1
+CMI r3 0
+BRR 00 r4
+
+
+JMI r5 0

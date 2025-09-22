@@ -1,0 +1,13 @@
+To compiler the system, you have to compile "SystemMonitor.cpp"
+
+Compiler assmebly program using:
+./SAYACasm program.s
+
+While writing the assmebly code, keep in mind that the immediates are signed
+
+After assmebly make sure to delete the empty line at the bottom of "binfile.txt"
+
+In SAYAC monitor program use "run" to start simulation for 7000NS
+for longer simulation you can execute the "run" command multiple times 
+or use "run DURATION" with DURATION begin the time you want in NS
+

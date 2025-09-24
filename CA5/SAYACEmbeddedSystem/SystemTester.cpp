@@ -39,41 +39,41 @@ void SystemTester::clocking()
 		clk = SC_LOGIC_1;
 	}
 }
+//Amir : sc_main for testing burst DMA
+// int sc_main(int argc, char* argv[])
+// {
+//     // Silence SystemC warnings about sc_logic
+//     sc_report_handler::set_actions(SC_ID_VECTOR_CONTAINS_LOGIC_VALUE_, SC_DO_NOTHING);
+//     sc_report_handler::set_actions(SC_WARNING, SC_DO_NOTHING);
 
-int sc_main(int argc, char* argv[])
-{
-    // Silence SystemC warnings about sc_logic
-    sc_report_handler::set_actions(SC_ID_VECTOR_CONTAINS_LOGIC_VALUE_, SC_DO_NOTHING);
-    sc_report_handler::set_actions(SC_WARNING, SC_DO_NOTHING);
+//     // Instantiate the top-level tester
+//     SystemTester* TOP = new SystemTester("systemTester");
 
-    // Instantiate the top-level tester
-    SystemTester* TOP = new SystemTester("systemTester");
+//     // Create VCD trace file
+//     sc_trace_file* VCDFile;
+//     VCDFile = sc_create_vcd_trace_file("wave");
 
-    // Create VCD trace file
-    sc_trace_file* VCDFile;
-    VCDFile = sc_create_vcd_trace_file("wave");
+//     // Trace clock
+//     sc_trace(VCDFile, TOP->clk, "clk");
 
-    // Trace clock
-    sc_trace(VCDFile, TOP->clk, "clk");
+//     // Trace some key DMA + MMA signals for burst testing
+//     sc_trace(VCDFile, TOP->systemModule->dma->i_addr, "dma_i_addr");
+//     sc_trace(VCDFile, TOP->systemModule->dma->i_out, "dma_i_out");
+//     sc_trace(VCDFile, TOP->systemModule->dma->i_in, "dma_i_in");
+//     sc_trace(VCDFile, TOP->systemModule->dma->i_rd, "dma_i_rd");
+//     sc_trace(VCDFile, TOP->systemModule->dma->i_wr, "dma_i_wr");
+//     sc_trace(VCDFile, TOP->systemModule->dma->i_ready, "dma_i_ready");
 
-    // Trace some key DMA + MMA signals for burst testing
-    sc_trace(VCDFile, TOP->systemModule->dma->i_addr, "dma_i_addr");
-    sc_trace(VCDFile, TOP->systemModule->dma->i_out, "dma_i_out");
-    sc_trace(VCDFile, TOP->systemModule->dma->i_in, "dma_i_in");
-    sc_trace(VCDFile, TOP->systemModule->dma->i_rd, "dma_i_rd");
-    sc_trace(VCDFile, TOP->systemModule->dma->i_wr, "dma_i_wr");
-    sc_trace(VCDFile, TOP->systemModule->dma->i_ready, "dma_i_ready");
+//     sc_trace(VCDFile, TOP->systemModule->mma->dmaIn, "mma_dmaIn");
+//     sc_trace(VCDFile, TOP->systemModule->mma->dmaOut, "mma_dmaOut");
+//     sc_trace(VCDFile, TOP->systemModule->mma->controlReg, "mma_controlReg");
 
-    sc_trace(VCDFile, TOP->systemModule->mma->dmaIn, "mma_dmaIn");
-    sc_trace(VCDFile, TOP->systemModule->mma->dmaOut, "mma_dmaOut");
-    sc_trace(VCDFile, TOP->systemModule->mma->controlReg, "mma_controlReg");
+//     // Run the simulation
+//     sc_start(10000, SC_NS);
 
-    // Run the simulation
-    sc_start(10000, SC_NS);
-
-    sc_close_vcd_trace_file(VCDFile);
-    return 0;
-}
+//     sc_close_vcd_trace_file(VCDFile);
+//     return 0;
+// }
 
 
 // int sc_main(int argc, char *argv[])

@@ -8,6 +8,53 @@ int busChannel::getPriorityMaster() {
     return -1;                    // No master is requesting
 }
 
+// Amir: Master sends memory request to the bus (burst mode supported)
+void busChannel::masterMMreq_burst(sc_lv<16> startAddr, sc_lv<16>* writeData, sc_lv<16>* readData,
+    int masterID, sc_logic readMem, sc_logic writeMem, int burstLen) {
+requesting[masterID] = true; // Mark this master as requesting access
+
+// Wait until this master becomes the highest priority requesting master
+while (getPriorityMaster() != masterID) {
+wait(slaveOprCompleted); // Wait until another master finishes
+}
+
+// Lock the bus for the entire burst
+busBusy.lock();
+requesting[masterID] = false;
+
+for (int i = 0; i < burstLen; i++) {
+// Set address and data for this beat
+addrOut = startAddr.to_uint() + i;  
+writeDataOut = writeData ? writeData[i] : sc_lv<16>("ZZZZZZZZZZZZZZZZ");
+readMemOut = readMem;
+writeMemOut = writeMem;
+masterIDOut = masterID;
+
+goingToSlave = decodeSlave(startAddr.to_uint() + i);
+
+if (goingToSlave >= 0 && goingToSlave <= 3) {
+cout << "[busChannel :: masterMMreq_burst] Beat " << i
+<< " goingToSlave = " << goingToSlave << endl;
+
+requestMM[goingToSlave].notify(SC_ZERO_TIME); // Notify the slave
+
+wait(slaveOprCompleted); // Wait for completion of this beat
+
+if (readMem == SC_LOGIC_1 && readData) {
+readData[i] = readDataIn; // Store returned value
+}
+} else {
+cout << "[busChannel] Invalid slave ID, skipping this beat." << endl;
+}
+}
+
+// Release the bus after the whole burst
+busBusy.unlock();
+}
+
+
+
+
 // Master sends memory request to the bus
 void busChannel::masterMMreq(sc_lv<16> addr, sc_lv<16> writeData, sc_lv<16> raeadData, int masterID,
     sc_logic readMem, sc_logic writeMem) {

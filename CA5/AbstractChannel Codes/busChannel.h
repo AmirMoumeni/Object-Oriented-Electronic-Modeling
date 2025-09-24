@@ -19,8 +19,6 @@ public:
     sc_signal<int> masterIDOut;
     sc_signal<sc_logic> memReadyOut;
 
-
-
     sc_event slaveOprCompleted;
     sc_event requestMM[4];
 
@@ -30,7 +28,9 @@ public:
 
     void masterMMreq(sc_lv<16> addr, sc_lv<16> writeData, sc_lv<16> raeadData, int masterID,
         sc_logic readMem, sc_logic writeMem) override;
-
+    
+    void masterMMreq_burst(sc_lv<16> startAddr, sc_lv<16>* writeData, sc_lv<16>* readData,
+        int masterID, sc_logic readMem, sc_logic writeMem, int burstLen);
     void slaveMMcollection(int slaveID,
         sc_lv<16>& addr,
         sc_lv<16>& data,
